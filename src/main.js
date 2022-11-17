@@ -45,10 +45,3 @@ const createListOfProducts = async () => {
 };
 
 createListOfProducts();
-
-// Sugestão: Você pode criar uma função que adicione ao DOM o elemento com o texto carregando... e outra para retirá-lo, o que acha?
-
-// O que será testado:
-
-// Verifica se o texto de "carregando" está visível durante uma requisição à API.
-// Verifica se o texto de "carregando" não está visível após a requisição à API ser concluída.
