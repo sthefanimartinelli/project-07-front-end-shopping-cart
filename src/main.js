@@ -18,18 +18,30 @@ const removeLoading = () => {
   loadEl.remove();
 };
 
+const errorRequisition = () => {
+  const loadEl = document.createElement('div');
+  const body = document.querySelector('body');
+  body.appendChild(loadEl);
+  loadEl.className = 'error';
+  loadEl.innerHTML = 'Algum erro ocorreu, recarregue a página e tente novamente';
+};
+
 const createListOfProducts = async () => {
   addLoading();
-  const data = await fetchProductsList('computador');
-  removeLoading();
-  data.forEach((element) => {
-    const { id, title, thumbnail, price } = element;
-    const obj = { id, title, thumbnail, price };
-    const product = createProductElement(obj);
-    const productSection = document.querySelector('.products');
-    productSection.appendChild(product);
-    return product;
-  });
+  try {
+    const data = await fetchProductsList('computador');
+    removeLoading();
+    data.forEach((element) => {
+      const { id, title, thumbnail, price } = element;
+      const obj = { id, title, thumbnail, price };
+      const product = createProductElement(obj);
+      const productSection = document.querySelector('.products');
+      productSection.appendChild(product);
+      return product;
+    });
+  } catch {
+    errorRequisition();
+  }
 };
 
 createListOfProducts();
