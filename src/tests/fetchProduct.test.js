@@ -24,7 +24,19 @@ describe('Teste a função fetchProduct', () => {
   });
 
   it('ao chamar a função fetchProduct sem argumento, retorna um erro com a mensagem: `ID não informado`.', async () => {
-    await expect(fetchProduct()).rejects.toThrow(new Error('ID não informado'));
+    await expect(fetchProduct()).rejects.toThrow('ID não informado');
   });
-  
+
+  // it('ao chamar a função fetchProduct com id que não existe retorna erro`.', async () => {
+  //   try {
+  //     const result await fetchProduct('bla');
+  //   } catch (e) {
+  //     expect(result).toBe(e)
+  //   }
+  // });
+
+  // it('ao chamar a função fetchProduct com id que não existe retorna erro', async () => {
+  //   await expect(fetchProduct('bla')).rejects.toThrow(new Error);
+  // });
+
 });
