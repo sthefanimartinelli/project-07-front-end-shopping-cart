@@ -27,16 +27,4 @@ describe('Teste a função fetchProduct', () => {
     await expect(fetchProduct()).rejects.toThrow('ID não informado');
   });
 
-  // it('ao chamar a função fetchProduct com id que não existe retorna erro`.', async () => {
-  //   try {
-  //     const result await fetchProduct('bla');
-  //   } catch (e) {
-  //     expect(result).toBe(e)
-  //   }
-  // });
-
-  // it('ao chamar a função fetchProduct com id que não existe retorna erro', async () => {
-  //   await expect(fetchProduct('bla')).rejects.toThrow(new Error);
-  // });
-
 });
