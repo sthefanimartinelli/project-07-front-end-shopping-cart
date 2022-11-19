@@ -1,4 +1,4 @@
-import { saveCartID } from './helpers/cartFunctions';
+import { saveCartID, getSavedCartIDs } from './helpers/cartFunctions';
 import { searchCep } from './helpers/cepFunctions';
 import { fetchProduct, fetchProductsList } from './helpers/fetchFunctions';
 import { createCartProductElement, createProductElement } from './helpers/shopFunctions';
@@ -27,6 +27,17 @@ const errorRequisition = () => {
   loadEl.innerHTML = 'Algum erro ocorreu, recarregue a página e tente novamente';
 };
 
+const setCartPrice = () => {
+  const subtotal = document.querySelector('.total-price');
+  const cartProducts = document
+    .querySelectorAll('.cart__products .product__price__value');
+  let counter = 0;
+  cartProducts.forEach((product) => {
+    counter += parseFloat(product.innerHTML);
+  });
+  subtotal.innerHTML = counter.toString();
+};
+
 const createListOfProducts = async () => {
   addLoading();
   try {
@@ -40,10 +51,11 @@ const createListOfProducts = async () => {
       btn.addEventListener('click', async () => {
         saveCartID(id);
         const details = await fetchProduct(id);
-        // const obj = { title: details.title, id: details.id, pictures: details.pictures, price: details.price };
+        // const obj = { title: details.title, id: details.id, pictures: details.pictures, price: details.price }; // assim também funcionaria
         const objCarrinho = createCartProductElement(details);
         const carrinho = document.querySelector('.cart__products');
         carrinho.appendChild(objCarrinho);
+        setCartPrice();
       });
       const productSection = document.querySelector('.products');
       productSection.appendChild(product);
@@ -55,3 +67,21 @@ const createListOfProducts = async () => {
 };
 
 createListOfProducts();
+
+const loadCartProducts = async () => {
+  const savedCart = getSavedCartIDs();
+
+  Promise.all(savedCart.map((item) => fetchProduct(item)))
+    .then((details) => {
+      details.forEach((detail) => {
+        const obj = createCartProductElement(detail);
+        const carrinho = document.querySelector('.cart__products');
+        carrinho.appendChild(obj);
+      });
+      setCartPrice();
+    });
+};
+
+window.onload = async () => {
+  loadCartProducts();
+};
