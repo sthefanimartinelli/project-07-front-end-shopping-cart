@@ -2,7 +2,8 @@ export const getAddress = async (cep) => {
   const promiseAPI1 = fetch(`https://cep.awesomeapi.com.br/json/${cep}`);
   const promiseAPI2 = fetch(`https://brasilapi.com.br/api/cep/v2/${cep}`);
   const promises = [promiseAPI1, promiseAPI2];
-  Promise.any(promises).then((response) => response.json())
+  const addr = await Promise.any(promises)
+    .then((response) => response.json())
     .then((data) => {
       const rua = data.address_name;
       const bairro = data.district;
@@ -10,17 +11,16 @@ export const getAddress = async (cep) => {
       const estado = data.state;
       const addressObj = `${rua} - ${bairro} - ${cidade} - ${estado}`;
       return addressObj;
+    }).catch((e) => {
+      console.log(e);
+      return 'CEP não encontrado';
     });
-  // .catch(() => {
-  //   const cepEl = document.querySelector('.cart__address');
-  //   cepEl.innerHTML = 'CEP não encontrado';
-  // });
+  return addr;
 };
 
-export const searchCep = () => {
-  const cepInserted = document.querySelector('.cep-input').innerHTML;
-  const data = getAddress(cepInserted);
-  console.log(data);
-  const cepSpan = document.querySelector('cart__address');
-  // cepSpan.innerHTML = data;
+export const searchCep = async () => {
+  const cepInserted = document.querySelector('.cep-input').value;
+  const data = await getAddress(cepInserted);
+  const cepSpan = document.querySelector('.cart__address');
+  cepSpan.innerText = data;
 };
