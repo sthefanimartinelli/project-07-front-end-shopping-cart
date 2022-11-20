@@ -9,8 +9,11 @@ export const getAddress = async (cep) => {
       const bairro = data.district;
       const cidade = data.city;
       const estado = data.state;
-      const addressObj = `${rua} - ${bairro} - ${cidade} - ${estado}`;
-      return addressObj;
+      if (rua && bairro && cidade && estado) {
+        const addressObj = `${rua} - ${bairro} - ${cidade} - ${estado}`;
+        return addressObj;
+      }
+      return 'CEP não encontrado';
     }).catch((e) => {
       console.log(e);
       return 'CEP não encontrado';
