@@ -5,7 +5,7 @@ export const getAddress = async (cep) => {
   const addr = await Promise.any(promises)
     .then((response) => response.json())
     .then((data) => {
-      const rua = data.address_name;
+      const rua = data.address;
       const bairro = data.district;
       const cidade = data.city;
       const estado = data.state;
