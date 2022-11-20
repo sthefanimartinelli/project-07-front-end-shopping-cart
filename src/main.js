@@ -1,4 +1,4 @@
-import { saveCartID, getSavedCartIDs } from './helpers/cartFunctions';
+import { saveCartID, getSavedCartIDs, removeCartID } from './helpers/cartFunctions';
 import { searchCep } from './helpers/cepFunctions';
 import { fetchProduct, fetchProductsList } from './helpers/fetchFunctions';
 import { createCartProductElement, createProductElement } from './helpers/shopFunctions';
@@ -38,36 +38,6 @@ const setCartPrice = () => {
   subtotal.innerHTML = counter.toString();
 };
 
-const createListOfProducts = async () => {
-  addLoading();
-  try {
-    const data = await fetchProductsList('computador');
-    removeLoading();
-    data.forEach((element) => {
-      const { id, title, thumbnail, price } = element;
-      const obj = { id, title, thumbnail, price };
-      const product = createProductElement(obj);
-      const btn = product.querySelector('.product__add');
-      btn.addEventListener('click', async () => {
-        saveCartID(id);
-        const details = await fetchProduct(id);
-        // const obj = { title: details.title, id: details.id, pictures: details.pictures, price: details.price }; // assim também funcionaria
-        const objCarrinho = createCartProductElement(details);
-        const carrinho = document.querySelector('.cart__products');
-        carrinho.appendChild(objCarrinho);
-        setCartPrice();
-      });
-      const productSection = document.querySelector('.products');
-      productSection.appendChild(product);
-      return product;
-    });
-  } catch {
-    errorRequisition();
-  }
-};
-
-createListOfProducts();
-
 const loadCartProducts = async () => {
   const savedCart = getSavedCartIDs();
 
@@ -85,3 +55,37 @@ const loadCartProducts = async () => {
 window.onload = async () => {
   loadCartProducts();
 };
+
+const addToCart = (id) => async () => {
+  saveCartID(id);
+  const details = await fetchProduct(id);
+  // const obj = { title: details.title, id: details.id, pictures: details.pictures, price: details.price }; // assim também funcionaria
+  const objCarrinho = createCartProductElement(details);
+  const carrinho = document.querySelector('.cart__products');
+  // const product = carrinho.querySelector('.cart__product');
+  // removeBtn.addEventListener('click', removeFromCart(id));
+  carrinho.appendChild(objCarrinho);
+  setCartPrice();
+};
+
+const createListOfProducts = async () => {
+  addLoading();
+  try {
+    const data = await fetchProductsList('computador');
+    removeLoading();
+    data.forEach((element) => {
+      const { id, title, thumbnail, price } = element;
+      const obj = { id, title, thumbnail, price };
+      const product = createProductElement(obj);
+      const addBtn = product.querySelector('.product__add');
+      addBtn.addEventListener('click', addToCart(id));
+      const productSection = document.querySelector('.products');
+      productSection.appendChild(product);
+      return product;
+    });
+  } catch {
+    errorRequisition();
+  }
+};
+
+createListOfProducts();

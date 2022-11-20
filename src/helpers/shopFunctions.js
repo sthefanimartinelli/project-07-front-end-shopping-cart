@@ -48,6 +48,14 @@ export const getIdFromProduct = (product) => (
 const removeCartProduct = (li, id) => {
   li.remove();
   removeCartID(id);
+  const subtotal = document.querySelector('.total-price');
+  const cartProducts = document
+    .querySelectorAll('.cart__products .product__price__value');
+  let counter = 0;
+  cartProducts.forEach((product) => {
+    counter += parseFloat(product.innerHTML);
+  });
+  subtotal.innerHTML = counter.toString();
 };
 
 /**
